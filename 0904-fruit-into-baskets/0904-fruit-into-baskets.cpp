@@ -1,6 +1,7 @@
 class Solution {
 public:
     int totalFruit(vector<int>& fruits) {
+        if(fruits.size()<3) return fruits.size();
         int n = fruits.size();
         int s=0,e=0,res=0;
         unordered_map<int,int> freq;
