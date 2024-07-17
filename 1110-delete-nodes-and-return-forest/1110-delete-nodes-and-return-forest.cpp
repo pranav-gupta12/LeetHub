@@ -11,38 +11,30 @@
  */
 class Solution {
 public:
-    void helper(TreeNode* root, unordered_map<int, bool>& toDelete, vector<TreeNode*>& result, TreeNode* parent, bool isLeft) {
-        if (!root) return;
+     TreeNode* dfs(TreeNode* node, unordered_set<int>& toDelete, vector<TreeNode*>& result) {
+        if (!node) return nullptr;
 
-        // Recursively traverse left and right subtrees
-        helper(root->left, toDelete, result, root, true);
-        helper(root->right, toDelete, result, root, false);
+        node->left = dfs(node->left, toDelete, result);
+        node->right = dfs(node->right, toDelete, result);
 
-        // If the current node needs to be deleted
-        if (toDelete[root->val]) {
-            if (root->left) result.push_back(root->left);  // Add left child to the result if it exists
-            if (root->right) result.push_back(root->right); // Add right child to the result if it exists
-            if (parent) {
-                if (isLeft) parent->left = nullptr;  // Remove the current node from its parent
-                else parent->right = nullptr;
-            }
+        if (toDelete.count(node->val)) {
+            if (node->left) result.push_back(node->left);
+            if (node->right) result.push_back(node->right);
+            return nullptr;
         }
+
+        return node;
     }
     vector<TreeNode*> delNodes(TreeNode* root, vector<int>& to_delete) {
-      unordered_map<int, bool> toDelete;
-        for (int val : to_delete) {
-            toDelete[val] = true;
-        }
-        
+         unordered_set<int> toDelete(to_delete.begin(), to_delete.end());
         vector<TreeNode*> result;
-        helper(root, toDelete, result, nullptr, false);
         
-        // If the root is not deleted, add it to the result
-        if (!toDelete[root->val]) {
+        if (!toDelete.count(root->val)) {
             result.push_back(root);
         }
-        
+
+        dfs(root, toDelete, result);
+
         return result;
-        }
-    
+    }
 };
