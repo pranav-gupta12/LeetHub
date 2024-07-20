@@ -4,22 +4,15 @@ public:
         int r = rowSum.size();
         int c = colSum.size();
         vector<vector<int>> ans(r , vector<int>(c,0));
-        for(int i=0;i<r;i++){
-            for(int j=0;j<c;j++){
-                if(rowSum[i]<colSum[j]){
-                    
-                    ans[i][j] += rowSum[i];
-                    rowSum[i] -= ans[i][j];
-                    colSum[j] -= ans[i][j];
-                }
-                else
-                {
-                    ans[i][j] += colSum[j];
-                    rowSum[i] -= ans[i][j];
-                    colSum[j] -= ans[i][j];
-                    
-                }
+       int i=0,j=0;
+        while(i<r && j<c){
+            ans[i][j] += min(rowSum[i],colSum[j]);
+            rowSum[i] -= ans[i][j];
+            colSum[j] -= ans[i][j];
+            if(rowSum[i]==0){
+                i++;
             }
+            if(colSum[j]==0) j++;
             
         }
         return ans;
