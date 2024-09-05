@@ -1,34 +1,55 @@
 class Solution {
 public:
-    vector<vector<int>> dir{{1,0},{0,1},{-1,0},{0,-1}};
-    void dfs(vector<vector<int>>& grid,vector<vector<int>>& marked,int i, int j){
-    marked[i][j] = 1;
-        for(auto it : dir){
-            int new_i = i+it[0];
-            int new_j = j+it[1];
-           if(new_i>=0 && new_i <marked.size() && new_j>=0 && new_j < marked[0].size() && marked[new_i][new_j]==-1 && grid[new_i][new_j] ==1){
-dfs(grid,marked,new_i,new_j);
-           }   
-        }
-    }
     int numEnclaves(vector<vector<int>>& grid) {
-        int m =grid.size();
-        int n = grid[0].size();
-        vector<vector<int>> marked(m,vector<int>(n,-1));
-        int tot =0;
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-             if((i == 0 || j == 0 || i == m-1 || j == n-1) && marked[i][j] == -1 && grid[i][j] == 1) {
-                    dfs(grid, marked, i, j);
+         queue<pair<int,int>> q; 
+        int n = grid.size(); 
+        int m = grid[0].size(); 
+       vector<vector<int>> vis(n, vector<int>(m, 0));
+        // traverse boundary elements
+        for(int i = 0;i<n;i++) {
+            for(int j = 0;j<m;j++) {
+                // first row, first col, last row, last col 
+                if(i == 0 || j == 0 || i == n-1 || j == m-1) {
+                    // if it is a land then store it in queue
+                    if(grid[i][j] == 1) {
+                        q.push({i, j}); 
+                        vis[i][j] = 1; 
+                    }
                 }
             }
         }
         
-          for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-                if(marked[i][j] !=1 && grid[i][j]==1 ) tot++;
+        int delrow[] = {-1, 0, +1, 0};
+        int delcol[] = {0, +1, +0, -1}; 
+        
+        while(!q.empty()) {
+            int row = q.front().first; 
+            int col = q.front().second; 
+            q.pop(); 
+            
+            // traverses all 4 directions
+            for(int i = 0;i<4;i++) {
+                int nrow = row + delrow[i];
+                int ncol = col + delcol[i]; 
+                // check for valid coordinates and for land cell
+                if(nrow >=0 && nrow <n && ncol >=0 && ncol < m 
+                && vis[nrow][ncol] == 0 && grid[nrow][ncol] == 1) {
+                    q.push({nrow, ncol});
+                    vis[nrow][ncol] = 1; 
+                }
+            }
+            
+        }
+        
+        int cnt = 0;
+        for(int i = 0;i<n;i++) {
+            for(int j = 0;j<m;j++) {
+                // check for unvisited land cell
+                if(grid[i][j] == 1 & vis[i][j] == 0) 
+                    cnt++; 
             }
         }
-        return tot;
+        return cnt; 
     }
 };
+
