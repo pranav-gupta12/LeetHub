@@ -1,59 +1,53 @@
 class MyCircularDeque {
 public:
-    int curr_size;
-    int max_size;
-    deque<int> que;
+    vector<int> arr;
+    int tot;
     MyCircularDeque(int k) {
-        
-         max_size=k;
-         curr_size = 0;
+        tot=k;
     }
     
     bool insertFront(int value) {
-        if(curr_size>=max_size) return false;
-        que.push_front(value);
-        curr_size++;
+        if(arr.size()==tot) return false;
+        arr.insert(arr.begin(),value);
         return true;
         
     }
     
     bool insertLast(int value) {
-         if(curr_size>=max_size) return false;
-         que.push_back(value);
-        curr_size++;
+          if(arr.size()==tot) return false;
+        arr.push_back(value);
         return true;
     }
     
     bool deleteFront() {
-        if(curr_size==0) return false;
-        que.pop_front();
-        curr_size--;
+        if(arr.size()==0) return false;
+        arr.erase(arr.begin());
         return true;
     }
     
     bool deleteLast() {
-          if(curr_size==0) return false;
-        que.pop_back();
-        curr_size--;
+         if(arr.size()==0) return false;
+        arr.pop_back();
         return true;
     }
     
     int getFront() {
-            if(curr_size==0) return -1;
-        return que.front();
+         if(arr.size()==0) return -1;
+        return arr.front();
     }
     
     int getRear() {
-           if(curr_size==0) return -1;
-        return que.back();
+          if(arr.size()==0) return -1;
+        return arr.back();
     }
     
     bool isEmpty() {
-        return que.empty();
+          if(arr.size()==0) return true;
+        return false;
     }
     
     bool isFull() {
-        if(curr_size==max_size) return true;
+          if(arr.size()==tot) return true;
         return false;
     }
 };
