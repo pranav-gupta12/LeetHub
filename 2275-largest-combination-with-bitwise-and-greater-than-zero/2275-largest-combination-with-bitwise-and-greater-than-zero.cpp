@@ -5,7 +5,7 @@ public:
         for(int i = 0;i < 24; i++){
             int res = 0;
             for(int j = 0;j < candidates.size(); j++){
-                if (candidates[j] & (1 << i)) {
+                if ((candidates[j]>>i) & 1) {
                     res++;
                 }
             }
