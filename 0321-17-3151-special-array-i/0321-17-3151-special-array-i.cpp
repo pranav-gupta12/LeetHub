@@ -6,9 +6,8 @@ public:
         int n = nums.size();
         if(n<=1) return true;
         while(j<n){
-            if(nums[i] %2  == nums[j] %2) return false;
-            i++;
-            j++;
+            if(nums[i++] %2  == nums[j++] %2) return false;
+           
         }
         return true;
     }
